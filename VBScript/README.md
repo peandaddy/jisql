@@ -1,0 +1,1 @@
+My journey for learning VBScripts back the time.
