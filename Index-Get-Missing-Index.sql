@@ -1,0 +1,18 @@
+SELECT
+	databases.name AS [Database_Name],
+	dm_db_missing_index_details.statement AS Table_Name,
+	dm_db_missing_index_details.Equality_Columns,
+	dm_db_missing_index_details.Inequality_Columns,
+	dm_db_missing_index_details.Included_Columns AS Include_Columns,
+	dm_db_missing_index_group_stats.Last_User_Seek,
+	dm_db_missing_index_group_stats.Avg_Total_User_Cost,
+	dm_db_missing_index_group_stats.Avg_User_Impact,
+	dm_db_missing_index_group_stats.User_Seeks
+FROM sys.dm_db_missing_index_groups
+INNER JOIN sys.dm_db_missing_index_group_stats
+ON dm_db_missing_index_group_stats.group_handle = dm_db_missing_index_groups.index_group_handle
+INNER JOIN sys.dm_db_missing_index_details
+ON dm_db_missing_index_groups.index_handle = dm_db_missing_index_details.index_handle
+INNER JOIN sys.databases
+ON databases.database_id = dm_db_missing_index_details.database_id
+order by databases.name ,dm_db_missing_index_details.statement;
